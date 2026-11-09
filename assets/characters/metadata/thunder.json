@@ -1,0 +1,371 @@
+{
+  "assetStatus": "LICENSED USER-PROVIDED PIXEL ART · KNIGHT PACK",
+  "fighter": "thunder",
+  "sourceReference": "../source/knight/Sprites/IDLE.png",
+  "atlas": "../atlases/thunder-placeholder.svg",
+  "frameWidth": 128,
+  "frameHeight": 128,
+  "columns": 7,
+  "rows": 6,
+  "frameCount": 40,
+  "anchor": {
+    "x": 56,
+    "y": 83
+  },
+  "animations": {
+    "idle": {
+      "start": 0,
+      "end": 2,
+      "count": 3,
+      "texture": "pack-knight-idle",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    "walk": {
+      "start": 3,
+      "end": 6,
+      "count": 4,
+      "texture": "pack-knight-walk",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "run": {
+      "start": 7,
+      "end": 10,
+      "count": 4,
+      "texture": "pack-knight-run",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "jump": {
+      "start": 11,
+      "end": 12,
+      "count": 2,
+      "texture": "pack-knight-jumpStart",
+      "frames": [
+        0,
+        1,
+        2
+      ]
+    },
+    "jumpFall": {
+      "start": 13,
+      "end": 14,
+      "count": 2,
+      "texture": "pack-knight-jumpFall",
+      "frames": [
+        0,
+        1,
+        2
+      ]
+    },
+    "land": {
+      "start": 15,
+      "end": 15,
+      "count": 1,
+      "texture": "pack-knight-jumpTransition",
+      "frames": [
+        0,
+        1,
+        2
+      ]
+    },
+    "crouch": {
+      "start": 16,
+      "end": 16,
+      "count": 1,
+      "texture": "pack-knight-block",
+      "frames": [
+        0
+      ]
+    },
+    "punch": {
+      "start": 17,
+      "end": 19,
+      "count": 3,
+      "texture": "pack-knight-punch",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "kick": {
+      "start": 20,
+      "end": 22,
+      "count": 3,
+      "texture": "pack-knight-kick",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    "special": {
+      "start": 23,
+      "end": 25,
+      "count": 3,
+      "texture": "pack-knight-special",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    "block": {
+      "start": 26,
+      "end": 27,
+      "count": 2,
+      "texture": "pack-knight-block",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "draw": {
+      "start": 28,
+      "end": 29,
+      "count": 2,
+      "texture": "pack-knight-block",
+      "frames": [
+        0,
+        1
+      ]
+    },
+    "weapon": {
+      "start": 30,
+      "end": 32,
+      "count": 3,
+      "texture": "pack-knight-punch",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "hit": {
+      "start": 33,
+      "end": 34,
+      "count": 2,
+      "texture": "pack-knight-hurt",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "knockout": {
+      "start": 35,
+      "end": 36,
+      "count": 2,
+      "texture": "pack-knight-death",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    "victory": {
+      "start": 37,
+      "end": 39,
+      "count": 3,
+      "texture": "pack-knight-idle",
+      "frames": [
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  "attackTiming": {
+    "punch": {
+      "activeFrame": 1,
+      "recoveryFrame": 2
+    },
+    "kick": {
+      "activeFrame": 1,
+      "recoveryFrame": 2
+    },
+    "weapon": {
+      "activeFrame": 1,
+      "recoveryFrame": 2
+    }
+  },
+  "assetAttribution": "FREE Knight 2D Pixel Art v1.2; included license permits use and modification in games.",
+  "sourcePack": "knight",
+  "sourceLicense": "../source/knight/License.txt",
+  "textures": {
+    "pack-knight-idle": {
+      "path": "../source/knight/Sprites/IDLE.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 14
+    },
+    "pack-knight-walk": {
+      "path": "../source/knight/Sprites/WALK.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 8
+    },
+    "pack-knight-run": {
+      "path": "../source/knight/Sprites/RUN.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 8
+    },
+    "pack-knight-jumpStart": {
+      "path": "../source/knight/Sprites/JUMP-START.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 3
+    },
+    "pack-knight-jumpTransition": {
+      "path": "../source/knight/Sprites/JUMP-TRANSITION.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 3
+    },
+    "pack-knight-jumpFall": {
+      "path": "../source/knight/Sprites/JUMP-FALL.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 3
+    },
+    "pack-knight-punch": {
+      "path": "../source/knight/Sprites/ATTACK 1.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 8
+    },
+    "pack-knight-kick": {
+      "path": "../source/knight/Sprites/ATTACK 2.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 9
+    },
+    "pack-knight-special": {
+      "path": "../source/knight/Sprites/ATTACK 3.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 11
+    },
+    "pack-knight-block": {
+      "path": "../source/knight/Sprites/BLOCK.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 6
+    },
+    "pack-knight-hurt": {
+      "path": "../source/knight/Sprites/HURT.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 8
+    },
+    "pack-knight-death": {
+      "path": "../source/knight/Sprites/DEATH.png",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "frameCount": 15
+    }
+  },
+  "origin": {
+    "x": 0.5,
+    "y": 0.8645833333333334
+  },
+  "spriteScale": 2.25,
+  "tint": "#f1d682",
+  "nativeStates": [
+    "idle",
+    "walk",
+    "run",
+    "jump",
+    "land",
+    "punch",
+    "kick",
+    "special",
+    "block",
+    "hit",
+    "knockout"
+  ],
+  "missingNativeAnimations": [
+    "draw",
+    "weapon",
+    "crouch",
+    "victory"
+  ]
+}

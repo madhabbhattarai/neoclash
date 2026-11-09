@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" aria-label="Temporary vector placeholder reference for shadow"><g transform="translate(0 -1.5)" >
+    <ellipse cx="65" cy="111" rx="29" ry="6" fill="#050812" opacity=".35"/>
+    <path d="M49 58 Q27 54 18 68 Q35 65 43 78 L53 67Z" fill="#53e7dd" opacity=".9"/><path d="M47 61 Q31 60 23 67" stroke="#d9ffff" stroke-width="2" opacity=".8"/>
+    <g transform="">
+      <path d="M51 81 Q41 91 42 105 L49 107 L61 88 M70 84 Q84 93 77 106 L86 108 L77 82" fill="none" stroke="#172534" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M51 82 Q43 92 45 103 M70 84 Q81 94 79 103" fill="none" stroke="#53e7dd" stroke-width="7" stroke-linecap="round"/>
+      <path d="M39 106h14m23 0h15" stroke="#d9ffff" stroke-width="4" stroke-linecap="round"/>
+      <path d="M48 56 L56 51 L73 51 L81 58 L78 83 L64 89 L49 82Z" fill="#172534" stroke="#53e7dd" stroke-width="2"/><path d="M52 59 L64 55 L77 60 L75 78 L64 84 L53 78Z" fill="#53e7dd"/><path d="M55 68h18" stroke="#d9ffff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M52 60 Q42 55 39 64 L26 68" fill="none" stroke="#172534" stroke-width="13" stroke-linecap="round"/>
+      <path d="M52 60 Q42 55 39 64 L26 68" fill="none" stroke="#53e7dd" stroke-width="7" stroke-linecap="round"/>
+      <path d="M75 62 Q86 70 91 78" stroke="#172534" stroke-width="14" stroke-linecap="round"/><path d="M75 62 Q86 70 91 78" stroke="#53e7dd" stroke-width="8" stroke-linecap="round"/>
+      
+      <path d="M52 51 Q64 46 76 52" fill="none" stroke="#d9ffff" stroke-width="2" opacity=".8"/>
+      <path d="M43 40 Q39 14 64 13 Q90 15 86 43 L80 56 L47 54 Z" fill="#172534" stroke="#d9ffff" stroke-opacity=".48" stroke-width="2"/><path d="M46 39 Q64 31 83 39 L80 47 Q64 43 48 48 Z" fill="#53e7dd"/><path d="M62 39h18" stroke="#d9ffff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    
+    
+    
+  </g></svg>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neon Clash Sprite Alignment Lab</title>
+<style>
+:root{color-scheme:dark;font:16px/1.5 system-ui,sans-serif;background:#090d16;color:#eef4ff}
+*{box-sizing:border-box}body{max-width:980px;margin:0 auto;padding:24px}
+h1{font-size:clamp(28px,5vw,44px);margin:0;color:#83f4e7}
+p,.note{color:#aab8ca}label{display:block;font-weight:700;margin:18px 0 6px}
+select,input,button{font:inherit;color:inherit;background:#141d2b;border:1px solid #3b4d65;border-radius:6px;padding:10px}
+button{cursor:pointer;background:#123d43;border-color:#42d7ca;font-weight:700;margin:8px 8px 0 0}
+button:disabled{opacity:.45;cursor:not-allowed}.panel{padding:18px;margin:16px 0;background:#111a27;border:1px solid #2b3a50;border-radius:10px}
+#result{white-space:pre-wrap;color:#ffc36b}.preview{max-width:100%;height:auto;border:1px solid #42506a;background-color:#0a1019;background-image:linear-gradient(45deg,#161f2b 25%,transparent 25%),linear-gradient(-45deg,#161f2b 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#161f2b 75%),linear-gradient(-45deg,transparent 75%,#161f2b 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+code{color:#a7fff5}.status-ok{color:#7ef0b1!important}.status-error{color:#ff879f!important}
+</style>
+</head>
+<body>
+<h1>Sprite Frame Alignment Lab</h1>
+<p>Normalize original transparent AI-art PNG frames to a shared 128×128 cell and foot anchor, validate alpha/bounds and required animation sequences, then export a Phaser-ready atlas and metadata.</p>
+<section class="panel">
+  <label for="fighter">Character</label>
+  <select id="fighter"><option>shadow</option><option>blaze</option><option>thunder</option><option>phantom</option></select>
+  <label for="frames">Select transparent PNG frames</label>
+  <input id="frames" type="file" accept="image/png" multiple>
+  <p class="note">Name frames <code>shadow_idle_01.png</code>, <code>shadow_walk_01.png</code>, etc. Provide all 40 frames: idle 3, walk 4, run 4, jump 2, falling jump 2, land 1, crouch 1, punch 3, kick 3, special 3, block 2, draw 2, weapon 3, hit 2, knockout 2, victory 3. Transparent padding is measured, removed, proportionally fit to 100px tall, centered at x=64 and aligned to the y=108 foot anchor.</p>
+  <button id="validate" disabled>Validate and build preview</button>
+  <button id="download-atlas" disabled>Download PNG atlas</button>
+  <button id="download-metadata" disabled>Download animation metadata</button>
+  <pre id="result" aria-live="polite">Choose a full named frame set to begin.</pre>
+</section>
+<canvas id="preview" class="preview" width="896" height="768" aria-label="Aligned sprite atlas preview"></canvas>
+<script>
+(() => {
+  "use strict";
+  const width=128,height=128,columns=7,anchor={x:64,y:108},bodyHeight=100;
+  const states=[["idle",3],["walk",4],["run",4],["jump",2],["jumpFall",2],["land",1],["crouch",1],["punch",3],["kick",3],["special",3],["block",2],["draw",2],["weapon",3],["hit",2],["knockout",2],["victory",3]];
+  const filesInput=document.querySelector("#frames"),fighterInput=document.querySelector("#fighter"),result=document.querySelector("#result");
+  const validateButton=document.querySelector("#validate"),atlasButton=document.querySelector("#download-atlas"),metadataButton=document.querySelector("#download-metadata"),preview=document.querySelector("#preview");
+  let builtAtlas=null,builtMetadata=null;
+  filesInput.addEventListener("change",()=>{validateButton.disabled=filesInput.files.length===0;atlasButton.disabled=true;metadataButton.disabled=true;result.className="";result.textContent=`${filesInput.files.length} file(s) selected. Click Validate and build preview.`;});
+  validateButton.addEventListener("click",async()=>{
+    const fighter=fighterInput.value,errors=[],warnings=[],framesByState=new Map(states.map(([name])=>[name,[]]));
+    const pattern=/^(?:(shadow|blaze|thunder|phantom)[_-])?(idle|walk|run|jump|jumpFall|land|crouch|punch|kick|special|block|draw|weapon|hit|knockout|victory)[_-](\d+)\.png$/i;
+    for(const file of [...filesInput.files]){
+      const match=file.name.match(pattern);
+      if(!match){errors.push(`${file.name}: expected [fighter_]state_01.png naming.`);continue;}
+      if(match[1]&&match[1].toLowerCase()!==fighter){errors.push(`${file.name}: belongs to ${match[1]}, not ${fighter}.`);continue;}
+      const state=match[2].toLowerCase()==="jumpfall"?"jumpFall":match[2].toLowerCase(),frameNumber=Number(match[3]);
+      try{
+        const bitmap=await createImageBitmap(file);
+          if(bitmap.width>4096||bitmap.height>4096){errors.push(`${file.name}: source dimensions exceed 4096×4096.`);bitmap.close();continue;}
+        const probe=document.createElement("canvas");probe.width=bitmap.width;probe.height=bitmap.height;
+        const probeContext=probe.getContext("2d",{willReadFrequently:true});probeContext.drawImage(bitmap,0,0);
+        const pixels=probeContext.getImageData(0,0,probe.width,probe.height).data;
+        let minX=probe.width,minY=probe.height,maxX=-1,maxY=-1,opaque=0;
+        for(let y=0;y<probe.height;y++)for(let x=0;x<probe.width;x++)if(pixels[(y*probe.width+x)*4+3]>8){opaque++;minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
+        bitmap.close();
+        if(maxX<minX){errors.push(`${file.name}: no visible pixels.`);continue;}
+        if(opaque===probe.width*probe.height)warnings.push(`${file.name}: no transparent pixels; check that the background is transparent.`);
+        framesByState.get(state).push({file,frameNumber,bounds:{x:minX,y:minY,width:maxX-minX+1,height:maxY-minY+1}});
+      }catch(error){errors.push(`${file.name}: could not decode PNG (${error.message}).`);}
+    }
+    const ordered=[];
+    for(const [state,count] of states){
+      const frames=framesByState.get(state).sort((a,b)=>a.frameNumber-b.frameNumber);
+      if(frames.length!==count)errors.push(`${state}: expected ${count} frame(s), found ${frames.length}.`);
+      const seen=new Set();
+      for(const [index,frame] of frames.entries()){
+        if(seen.has(frame.frameNumber))errors.push(`${state}: duplicate frame ${frame.frameNumber}.`);
+        if(frame.frameNumber!==index+1)errors.push(`${state}: frame sequence must be numbered 01 through ${String(count).padStart(2,"0")}.`);
+        seen.add(frame.frameNumber);
+      }
+      frames.forEach(frame=>ordered.push({...frame,state}));
+    }
+    if(errors.length){result.className="status-error";result.textContent=`Validation failed:\n- ${errors.join("\n- ")}${warnings.length?`\n\nWarnings:\n- ${warnings.join("\n- ")}`:""}`;return;}
+    const rows=Math.ceil(ordered.length/columns);preview.width=columns*width;preview.height=rows*height;
+    const context=preview.getContext("2d");context.clearRect(0,0,preview.width,preview.height);context.imageSmoothingEnabled=true;
+    const animations={};let cursor=0;
+    for(const [state] of states){
+      const selected=ordered.filter(frame=>frame.state===state),start=cursor;
+      for(const frame of selected){
+        const bitmap=await createImageBitmap(frame.file),bounds=frame.bounds,scale=bodyHeight/bounds.height;
+        const drawWidth=bounds.width*scale,x=cursor%columns*width+anchor.x-drawWidth/2,y=Math.floor(cursor/columns)*height+anchor.y-bodyHeight;
+        if(x<cursor%columns*width||x+drawWidth>(cursor%columns+1)*width)warnings.push(`${frame.file.name}: subject is wider than the normalized cell and may clip.`);
+        context.drawImage(bitmap,bounds.x,bounds.y,bounds.width,bounds.height,x,y,drawWidth,bodyHeight);bitmap.close();cursor++;
+      }
+      animations[state]={start,end:cursor-1,count:selected.length};
+    }
+    builtAtlas=await new Promise(resolve=>preview.toBlob(resolve,"image/png"));
+    builtMetadata={assetStatus:"USER-SUPPLIED TRANSPARENT PNG FRAMES, alpha-bounds aligned to a shared foot anchor.",fighter,atlas:`../atlases/${fighter}.png`,frameWidth:width,frameHeight:height,columns,rows,frameCount:ordered.length,anchor,animations,attackTiming:{punch:{activeFrame:1,recoveryFrame:2},kick:{activeFrame:1,recoveryFrame:2},weapon:{activeFrame:1,recoveryFrame:2}}};
+    atlasButton.disabled=!builtAtlas;metadataButton.disabled=false;result.className="status-ok";
+    result.textContent=`Validated ${ordered.length} transparent frames for ${fighter}.\nAtlas: ${preview.width}×${preview.height}px · cells: ${width}×${height}px · anchor: (${anchor.x}, ${anchor.y}).\n${warnings.length?`Warnings:\n- ${warnings.join("\n- ")}`:"All required states and frame sequences are present."}\nSave the PNG to assets/characters/atlases/${fighter}.png and JSON to assets/characters/metadata/${fighter}.json, then run: node tools/build_sprite_atlas.js --bundle-only`;
+  });
+  function download(blob,name){const link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);}
+  atlasButton.addEventListener("click",()=>{if(builtAtlas)download(builtAtlas,`${fighterInput.value}.png`);});
+  metadataButton.addEventListener("click",()=>{if(builtMetadata)download(new Blob([JSON.stringify(builtMetadata,null,2)],{type:"application/json"}),`${fighterInput.value}.json`);});
+})();
+</script>
+</body>
+</html>
